@@ -16,3 +16,5 @@ thiserror = "1.0.32"
 git2 = "0.15.0"
 simperby-common = { version = "0.0.0", path = "../common" }
 simperby-network = { version = "0.0.0", path = "../network" }
+[dependencies.libgit2-sys]
+version = "0.14.0"

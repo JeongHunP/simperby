@@ -12,7 +12,7 @@ fn get_timestamp() -> Timestamp {
 pub struct DistributedRepositoryImpl<T> {
     raw: T,
 }
-
+/*
 #[async_trait]
 impl<T: RawRepository + 'static> DistributedRepository<T> for DistributedRepositoryImpl<T> {
     async fn new(_raw: T) -> Result<Self, Error>
@@ -179,4 +179,4 @@ impl<T: RawRepository + 'static> DistributedRepository<T> for DistributedReposit
     ) -> Result<CommitHash, Error> {
         unimplemented!()
     }
-}
+}*/
