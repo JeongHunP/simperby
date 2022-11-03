@@ -46,7 +46,8 @@ impl<RR: RawRepository, R: DistributedRepository<RR>, C: Consensus, G: Governanc
     }
 
     async fn vote(&self, agenda_commit: CommitHash) -> Result<()> {
-        let repo = R::new(RR::open(&self.config.repository_directory).await?).await?;
+        /*
+        let repo = R::new(RR::open(&self.config.repository_directory)?).await?; //TODO: removed .await due to async problem
         let valid_agendas = repo.get_agendas().await?;
         let agenda_hash = if let Some(x) = valid_agendas.iter().find(|(x, _)| *x == agenda_commit) {
             x.1
@@ -65,7 +66,8 @@ impl<RR: RawRepository, R: DistributedRepository<RR>, C: Consensus, G: Governanc
                 &self.config.private_key,
             )
             .await?;
-        Ok(())
+        Ok(())*/
+        unimplemented!()
     }
 
     async fn veto_round(&self) -> Result<()> {
