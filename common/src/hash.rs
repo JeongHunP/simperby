@@ -6,6 +6,18 @@ impl ToHash256 for String {
     }
 }
 
+impl ToHash256 for u64 {
+    fn to_hash256(&self) -> Hash256 {
+        Hash256::hash(self.to_be_bytes())
+    }
+}
+
+impl ToHash256 for i64 {
+    fn to_hash256(&self) -> Hash256 {
+        Hash256::hash(self.to_be_bytes())
+    }
+}
+
 impl ToHash256 for Member {
     fn to_hash256(&self) -> Hash256 {
         Hash256::hash(serde_spb::to_vec(self).unwrap())
@@ -69,6 +81,34 @@ impl ToHash256 for ChatLog {
 impl ToHash256 for GenesisInfo {
     fn to_hash256(&self) -> Hash256 {
         Hash256::hash(serde_spb::to_vec(self).unwrap())
+    }
+}
+
+impl<T1, T2> ToHash256 for (T1, T2)
+where
+    T1: ToHash256,
+    T2: ToHash256,
+{
+    fn to_hash256(&self) -> Hash256 {
+        let mut hash = Hash256::zero();
+        hash = hash.aggregate(&self.0.to_hash256());
+        hash = hash.aggregate(&self.1.to_hash256());
+        hash
+    }
+}
+
+impl<T1, T2, T3> ToHash256 for (T1, T2, T3)
+where
+    T1: ToHash256,
+    T2: ToHash256,
+    T3: ToHash256,
+{
+    fn to_hash256(&self) -> Hash256 {
+        let mut hash = Hash256::zero();
+        hash = hash.aggregate(&self.0.to_hash256());
+        hash = hash.aggregate(&self.1.to_hash256());
+        hash = hash.aggregate(&self.2.to_hash256());
+        hash
     }
 }
 
