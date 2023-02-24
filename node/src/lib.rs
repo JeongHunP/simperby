@@ -123,6 +123,7 @@ pub async fn genesis(config: Config, path: &str) -> Result<()> {
             long_range_attack_distance: 3,
         },
         peers.clone(),
+        None,
     )
     .await?;
     repository.genesis().await?;

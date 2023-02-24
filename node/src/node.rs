@@ -37,6 +37,7 @@ impl SimperbyNode {
                 long_range_attack_distance: 3,
             },
             peers.clone(),
+            None,
         )
         .await?;
 

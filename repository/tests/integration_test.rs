@@ -32,6 +32,7 @@ async fn basic_1() {
             .unwrap(),
         config.clone(),
         peers.clone(),
+        None,
     )
     .await
     .unwrap();
@@ -55,6 +56,7 @@ async fn basic_1() {
             .unwrap(),
         config,
         peers.clone(),
+        None,
     )
     .await
     .unwrap();

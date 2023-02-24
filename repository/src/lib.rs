@@ -103,6 +103,7 @@ pub struct DistributedRepository<T> {
     raw: T,
     config: Config,
     peers: SharedKnownPeers,
+    private_key: Option<PrivateKey>,
 }
 
 impl<T: RawRepository> DistributedRepository<T> {
@@ -114,8 +115,18 @@ impl<T: RawRepository> DistributedRepository<T> {
         &self.raw
     }
 
-    pub async fn new(raw: T, config: Config, peers: SharedKnownPeers) -> Result<Self, Error> {
-        Ok(Self { raw, config, peers })
+    pub async fn new(
+        raw: T,
+        config: Config,
+        peers: SharedKnownPeers,
+        private_key: Option<PrivateKey>,
+    ) -> Result<Self, Error> {
+        Ok(Self {
+            raw,
+            config,
+            peers,
+            private_key,
+        })
     }
 
     /// Initializes the genesis repository, leaving a genesis header.
