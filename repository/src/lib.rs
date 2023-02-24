@@ -314,9 +314,9 @@ impl<T: RawRepository> DistributedRepository<T> {
                     &(commit_hash, branch.to_owned(), timestamp as u64),
                     self.private_key.as_ref().unwrap(),
                 )?;
-                let signer = serde_spb::to_string(signature.signer())?.replace("\"", "\\\"");
+                let signer = serde_spb::to_string(signature.signer())?.replace('\"', "\\\"");
                 let signature =
-                    serde_spb::to_string(&signature.get_raw_signature())?.replace("\"", "\\\"");
+                    serde_spb::to_string(&signature.get_raw_signature())?.replace('\"', "\\\"");
 
                 self.raw.create_branch(branch.into(), commit_hash).await?;
                 self.raw
@@ -341,9 +341,9 @@ impl<T: RawRepository> DistributedRepository<T> {
                     &(commit_hash, branch.to_owned(), timestamp as u64),
                     self.private_key.as_ref().unwrap(),
                 )?;
-                let signer = serde_spb::to_string(signature.signer())?.replace("\"", "\\\"");
+                let signer = serde_spb::to_string(signature.signer())?.replace('\"', "\\\"");
                 let signature =
-                    serde_spb::to_string(&signature.get_raw_signature())?.replace("\"", "\\\"");
+                    serde_spb::to_string(&signature.get_raw_signature())?.replace('\"', "\\\"");
 
                 self.raw.create_branch(branch.into(), commit_hash).await?;
                 self.raw
@@ -369,9 +369,9 @@ impl<T: RawRepository> DistributedRepository<T> {
                 &(commit_hash, branch.to_owned(), timestamp as u64),
                 self.private_key.as_ref().unwrap(),
             )?;
-            let signer = serde_spb::to_string(signature.signer())?.replace("\"", "\\\"");
+            let signer = serde_spb::to_string(signature.signer())?.replace('\"', "\\\"");
             let signature =
-                serde_spb::to_string(&signature.get_raw_signature())?.replace("\"", "\\\"");
+                serde_spb::to_string(&signature.get_raw_signature())?.replace('\"', "\\\"");
 
             self.raw.create_branch(branch.into(), commit_hash).await?;
             self.raw
