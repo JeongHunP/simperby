@@ -685,10 +685,12 @@ impl RawRepositoryImplInner {
 
         if let Some(option_string) = option {
             run_command(format!(
-                "cd {workdir} && git push {remote_name} {branch} --push-option='{option_string}'"
+                "cd {workdir} && git push --quiet {remote_name} {branch} --push-option='{option_string}'"
             ))?
         } else {
-            run_command(format!("cd {workdir} && git push {remote_name} {branch}"))?
+            run_command(format!(
+                "cd {workdir} && git push --quiet {remote_name} {branch}"
+            ))?
         };
 
         Ok(())
