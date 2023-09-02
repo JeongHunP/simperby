@@ -237,14 +237,24 @@ impl Client {
         let t2 = async move { Dms::serve(dms, network_config).await.unwrap() };
 
         // Serve repository
+        let network_config = ServerNetworkConfig {
+            port: config.repository_port,
+        };
+        let dms = this.repository.get_dms();
         let t3 = async move {
-            let _server = simperby_repository::server::run_server(
-                &this.path,
-                config.repository_port,
-                git_hook_verifier,
-            )
-            .await;
-            std::future::pending::<()>().await;
+            if this.config.git_network {
+                let _server = simperby_repository::server::run_server(
+                    &this.path,
+                    config.repository_port,
+                    git_hook_verifier,
+                )
+                .await;
+                std::future::pending::<()>().await;
+            } else {
+                Dms::serve(dms.expect("always Some"), network_config)
+                    .await
+                    .unwrap()
+            }
         };
 
         Ok(tokio::spawn(async move {
@@ -260,13 +270,22 @@ impl Client {
         };
         Dms::fetch(this.governance.get_dms(), &network_config).await?;
         Dms::fetch(this.consensus.get_dms(), &network_config).await?;
-        this.repository
-            .get_raw()
-            .write()
-            .await
-            .fetch_all(true)
+        if this.config.git_network {
+            this.repository
+                .get_raw()
+                .write()
+                .await
+                .fetch_all(true)
+                .await?;
+            this.repository.sync_all().await?;
+        } else {
+            Dms::fetch(
+                this.repository.get_dms().expect("always Some"),
+                &network_config,
+            )
             .await?;
-        this.repository.sync_all().await?;
+            this.repository.update(false).await?;
+        }
 
         let agendas = this.repository.read_agendas().await?;
         for (_, agenda_hash) in agendas {
@@ -302,7 +321,16 @@ impl Client {
         Dms::broadcast(this.governance.get_dms(), &network_config).await?;
         this.consensus.flush().await?;
         Dms::broadcast(this.consensus.get_dms(), &network_config).await?;
-        this.repository.broadcast().await?;
+        if this.config.git_network {
+            this.repository.broadcast().await?;
+        } else {
+            Dms::broadcast(
+                this.repository.get_dms().expect("always Some"),
+                &network_config,
+            )
+            .await?;
+            this.repository.flush().await?;
+        }
         Ok(())
     }
 
